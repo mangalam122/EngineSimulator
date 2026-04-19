@@ -40,6 +40,16 @@ export default function PartsTray() {
     return Array.from(byCat.entries()).filter(([, list]) => list.length > 0);
   }, [PARTS]);
 
+  // "Next up" guidance — first unplaced part whose deps are all met. Shown with
+  // a pulsing ring in the tray so new users always know which card to tap.
+  const nextUpId = useMemo(() => {
+    const sorted = [...PARTS].sort((a, b) => a.assemblyOrder - b.assemblyOrder);
+    const next = sorted.find(
+      (p) => !assembled.includes(p.id) && p.requiresParts.every((r) => assembled.includes(r)),
+    );
+    return next?.id ?? null;
+  }, [PARTS, assembled]);
+
   if (mode !== 'assembly') return null;
 
   return (
@@ -143,6 +153,7 @@ export default function PartsTray() {
                       placed={assembled.includes(part.id)}
                       held={heldPart === part.id}
                       depsMet={part.requiresParts.every((r) => assembled.includes(r))}
+                      isNextUp={nextUpId === part.id}
                       onPick={() => {
                         // Tap-to-place for all devices — the drag-to-position
                         // flow was unreliable on touch (no pointermove after
@@ -170,6 +181,7 @@ function TrayCard({
   placed,
   held,
   depsMet,
+  isNextUp,
   onPick,
   partById,
 }: {
@@ -177,6 +189,7 @@ function TrayCard({
   placed: boolean;
   held: boolean;
   depsMet: boolean;
+  isNextUp: boolean;
   onPick: () => void;
   partById: Record<string, EnginePart>;
 }) {
@@ -184,6 +197,8 @@ function TrayCard({
   const missing = part.requiresParts.filter((r) => !useEngineStore.getState().assembledParts.includes(r));
   const missingNames = missing.map((id) => partById[id]?.name ?? id).join(', ');
   const catColor = CATEGORY_COLOR[part.category];
+
+  const showNextGlow = isNextUp && !disabled;
 
   return (
     <button
@@ -199,14 +214,25 @@ function TrayCard({
         marginBottom: 6,
         background: placed
           ? 'rgba(111, 210, 122, 0.10)'
+          : showNextGlow
+          ? 'rgba(255, 122, 26, 0.16)'
           : held
           ? 'rgba(255, 122, 26, 0.12)'
           : 'rgba(255,255,255,0.03)',
-        border: '1px solid ' + (placed ? 'rgba(111,210,122,0.35)' : 'var(--border-subtle)'),
+        border:
+          '1px solid ' +
+          (placed
+            ? 'rgba(111,210,122,0.35)'
+            : showNextGlow
+            ? 'var(--accent)'
+            : 'var(--border-subtle)'),
+        boxShadow: showNextGlow ? '0 0 0 3px rgba(255,122,26,0.18)' : undefined,
+        animation: showNextGlow ? 'ev-next-pulse 1.8s ease-in-out infinite' : undefined,
         opacity: disabled && !placed ? 0.45 : 1,
         cursor: disabled ? 'not-allowed' : 'grab',
         textAlign: 'left',
         transition: 'background 0.15s ease',
+        position: 'relative',
       }}
       title={
         placed
@@ -250,6 +276,22 @@ function TrayCard({
           {!placed && !depsMet && (
             <span style={{ fontSize: 10, color: 'var(--text-secondary)', marginLeft: 'auto' }}>
               locked
+            </span>
+          )}
+          {showNextGlow && (
+            <span
+              style={{
+                fontSize: 9,
+                fontWeight: 700,
+                letterSpacing: 1,
+                color: '#0b0d10',
+                background: 'var(--accent)',
+                padding: '2px 6px',
+                borderRadius: 999,
+                marginLeft: 'auto',
+              }}
+            >
+              TAP ME
             </span>
           )}
         </div>

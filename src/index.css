@@ -38,6 +38,22 @@ button {
   background: none;
 }
 
+/* Onboarding pulse — draws the eye to the next-up tray card. */
+@keyframes ev-next-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.18); }
+  50%      { box-shadow: 0 0 0 6px rgba(255, 122, 26, 0.35); }
+}
+
+/* Floating "Parts" pill on mobile — gentle attention pulse so new users
+   notice it's tappable. Desktop keeps the static drop-shadow only. */
+@keyframes ev-pill-pulse {
+  0%, 100% { box-shadow: 0 6px 20px rgba(255,122,26,0.45); }
+  50%      { box-shadow: 0 6px 28px rgba(255,122,26,0.75), 0 0 0 6px rgba(255,122,26,0.18); }
+}
+button[data-ui-panel="tray-handle"] {
+  animation: ev-pill-pulse 2.2s ease-in-out infinite;
+}
+
 /* scrollbar */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }

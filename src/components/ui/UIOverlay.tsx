@@ -15,6 +15,7 @@ import CompletionBanner from './CompletionBanner';
 import FourStrokeLegend from './FourStrokeLegend';
 import FiringOrderBadge from './FiringOrderBadge';
 import EngineSelector from './EngineSelector';
+import OnboardingCoach from './OnboardingCoach';
 import { useActiveSpec } from '../../data/engineSpecs';
 
 export default function UIOverlay() {
@@ -72,6 +73,9 @@ export default function UIOverlay() {
 
       {/* Completion celebration */}
       <CompletionBanner />
+
+      {/* First-visit welcome + contextual hints for new users */}
+      <OnboardingCoach />
     </div>
   );
 }
