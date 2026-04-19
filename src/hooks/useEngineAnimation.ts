@@ -148,8 +148,15 @@ export function useEngineAnimation() {
     }
 
     const spec = getActiveSpec();
-    if (!cacheRef.current) cacheRef.current = buildCache(scene, spec);
-    const cache = cacheRef.current;
+    // Rebuild cache while any critical ref is missing. This matters for the
+    // "Just show me it running" shortcut: we batch-place all parts and flip to
+    // run mode in a single tick, so the first useFrame fires BEFORE React has
+    // committed the piston/rod meshes. Without this retry, the cache would
+    // lock in empty refs forever and nothing would animate.
+    const existing = cacheRef.current;
+    const needsRebuild = !existing || !existing.crank || !existing.pistons[0];
+    const cache = needsRebuild ? buildCache(scene, spec) : (existing as CachedRefs);
+    cacheRef.current = cache;
 
     const clampedDt = Math.min(dt, 1 / 30);
     const omega = (store.rpm / 60) * Math.PI * 2;

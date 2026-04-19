@@ -11,11 +11,9 @@
  * users aren't nagged.
  */
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useEngineStore } from '../../store/useEngineStore';
 import { useActiveSpec } from '../../data/engineSpecs';
-
-const LS_KEY = 'ev_onboarded_v1';
 
 export default function OnboardingCoach() {
   const mode = useEngineStore((s) => s.mode);
@@ -25,26 +23,10 @@ export default function OnboardingCoach() {
   const spec = useActiveSpec();
   const total = spec.parts.length;
 
-  const [showWelcome, setShowWelcome] = useState(false);
-
-  // Check localStorage on mount — show welcome only on first visit.
-  useEffect(() => {
-    try {
-      if (!localStorage.getItem(LS_KEY)) setShowWelcome(true);
-    } catch {
-      // Private mode / storage disabled — just show once per session.
-      setShowWelcome(true);
-    }
-  }, []);
-
-  const dismissWelcome = () => {
-    setShowWelcome(false);
-    try {
-      localStorage.setItem(LS_KEY, '1');
-    } catch {
-      /* ignore */
-    }
-  };
+  // Welcome card shows on every page load so returning users always see the
+  // "Just show me it running" shortcut (no persistence by design).
+  const [showWelcome, setShowWelcome] = useState(true);
+  const dismissWelcome = () => setShowWelcome(false);
 
   // "Just watch it run" — auto-assemble everything, flip to run mode at the
   // lowest RPM with X-Ray on so the user immediately sees the animation. Great
