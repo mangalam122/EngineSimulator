@@ -66,6 +66,7 @@ export default function ModeToggle() {
           display: 'flex',
           alignItems: 'center',
           gap: 6,
+          whiteSpace: 'nowrap',
         }}
         title={canRun ? 'Toggle Run / Assembly' : 'Skip assembly and run'}
       >

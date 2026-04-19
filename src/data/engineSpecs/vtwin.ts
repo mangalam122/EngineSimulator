@@ -27,5 +27,7 @@ export const V_TWIN_SPEC: EngineSpec = {
   snapZones: VTW_SNAP_ZONES,
   partMeshes: VTWIN_PART_MESHES,
   audioPreset: 'potato',
-  rpm: { min: 700, default: 900, max: 5500 },
+  // Min dropped well below real idle so learners can step through the cycle
+  // slowly — makes the 315°/405° uneven fire easy to spot.
+  rpm: { min: 150, default: 900, max: 5500 },
 };

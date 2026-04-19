@@ -75,32 +75,89 @@ button {
     top: 72px !important;
     bottom: 8px !important;
   }
-  div[data-ui-panel="firing-badge"] {
-    top: auto !important;
-    bottom: 90px !important;
-    left: 8px !important;
-  }
-  div[data-ui-panel="legend"] {
-    left: 8px !important;
-    right: 8px !important;
-    bottom: 90px !important;
-    max-width: none !important;
-  }
-  div[data-ui-panel="rpm"] {
-    left: 8px !important;
-    right: 8px !important;
-    transform: none !important;
-  }
+
+  /* Top bar: ensure the controls cluster is tappable and doesn't overflow. */
   div[data-ui-panel="top-bar"] {
     left: 8px !important;
     right: 8px !important;
     top: 8px !important;
   }
+
+  /* Firing badge: anchor to bottom-left above the legend pill + RPM slider.
+     Inline styles place it top-left where it clips behind the header; we
+     pin it to the bottom-left column here so all three panels stack cleanly. */
+  div[data-ui-panel="firing-badge"] {
+    left: 8px !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: 150px !important;
+    padding: 6px 10px !important;
+    border-radius: 10px !important;
+    transform: scale(0.9);
+    transform-origin: left bottom;
+  }
+
+  /* 4-stroke legend (collapsed pill fits easily; expanded panel needs space). */
+  button[data-ui-panel="legend"] {
+    left: 8px !important;
+    bottom: 88px !important;
+  }
+  div[data-ui-panel="legend"] {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: 88px !important;
+    max-width: none !important;
+    max-height: 45vh;
+    overflow-y: auto;
+    z-index: 3;
+  }
+
+  /* RPM slider: span full width, higher z-index so nothing ever covers it. */
+  div[data-ui-panel="rpm"] {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    transform: none !important;
+    min-width: 0 !important;
+    padding: 10px 12px !important;
+    z-index: 6;
+  }
+  div[data-ui-panel="rpm"] input[type="range"] {
+    height: 36px;
+  }
 }
+
 
 /* Extra-narrow (iPhone SE) — shrink headline typography slightly */
 @media (max-width: 380px) {
   div[data-ui-panel="title"] > div:last-child {
     font-size: 16px !important;
+  }
+}
+
+/* On phones, tighten the top-bar controls cluster so all buttons fit in one
+   scrollable row instead of each one overflowing past the viewport edge. */
+@media (max-width: 640px) {
+  div[data-ui-panel="top-bar"] > div:nth-child(2) {
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none;
+    max-width: 100%;
+    padding-bottom: 2px;
+  }
+  div[data-ui-panel="top-bar"] > div:nth-child(2)::-webkit-scrollbar {
+    display: none;
+  }
+  /* Engine selector is the widest control — let it shrink before others. */
+  div[data-ui-panel="top-bar"] label {
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  div[data-ui-panel="top-bar"] label select {
+    max-width: 110px;
+  }
+  /* Tighten the progress bar under the top row to reclaim canvas height. */
+  div[data-ui-panel="top-bar"] > div:last-child {
+    margin-top: 2px;
   }
 }

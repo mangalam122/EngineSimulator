@@ -68,7 +68,9 @@ export const useEngineStore = create<EngineState>((set) => ({
   rpm: 900,
 
   trayOpen: true,
-  audioEnabled: true,
+  // Audio OFF by default so first-time visitors aren't surprised by sound on a
+  // public URL. The user opts in via the speaker button in the top bar.
+  audioEnabled: false,
   assemblyCompleteCelebration: false,
 
   pickUp: (partId) => set({ heldPart: partId, selectedPart: null }),

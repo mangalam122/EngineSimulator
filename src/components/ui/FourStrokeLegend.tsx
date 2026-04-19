@@ -3,6 +3,9 @@
  *
  * Highlights the active stroke for cylinder 1 based on crankAngle. Subscribes
  * to engineRuntime on a slow 10hz timer so the UI doesn't re-render at 60fps.
+ *
+ * On mobile the full panel overlaps the RPM slider, so we collapse to a tiny
+ * "current stroke" pill that the user can tap to expand the full legend.
  */
 import { useEffect, useState } from 'react';
 import { useEngineStore, engineRuntime } from '../../store/useEngineStore';
@@ -18,6 +21,11 @@ export default function FourStrokeLegend() {
   const mode = useEngineStore((s) => s.mode);
   const cutaway = useEngineStore((s) => s.cutawayEnabled);
   const [active, setActive] = useState(0);
+  // Default collapsed on narrow viewports so the firing badge and RPM slider
+  // stay visible; the user can expand on demand. Desktop defaults to expanded.
+  const [expanded, setExpanded] = useState(
+    typeof window !== 'undefined' ? window.innerWidth > 640 : true,
+  );
 
   useEffect(() => {
     if (!(mode === 'run' && cutaway)) return;
@@ -36,6 +44,39 @@ export default function FourStrokeLegend() {
 
   if (!(mode === 'run' && cutaway)) return null;
 
+  if (!expanded) {
+    // Collapsed pill — tap to expand. Takes almost no space so the RPM
+    // slider and firing badge have room on small screens.
+    return (
+      <button
+        data-ui-panel="legend"
+        onClick={() => setExpanded(true)}
+        style={{
+          position: 'absolute',
+          left: 16,
+          bottom: 20,
+          pointerEvents: 'auto',
+          background: 'var(--bg-panel)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 999,
+          padding: '8px 14px',
+          backdropFilter: 'blur(12px)',
+          color: 'var(--accent)',
+          fontSize: 12,
+          fontWeight: 700,
+          letterSpacing: 0.5,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+        }}
+        title="Tap to see the 4-stroke explanation"
+      >
+        <span style={{ color: 'var(--text-secondary)', fontSize: 10, letterSpacing: 2 }}>STROKE</span>
+        {active + 1}/4 · {STROKES[active].name}
+      </button>
+    );
+  }
+
   return (
     <div
       data-ui-panel="legend"
@@ -52,8 +93,29 @@ export default function FourStrokeLegend() {
         backdropFilter: 'blur(12px)',
       }}
     >
-      <div style={{ fontSize: 10, letterSpacing: 2, color: 'var(--text-secondary)', marginBottom: 8 }}>
-        4-STROKE CYCLE · CYLINDER 1
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 8,
+        }}
+      >
+        <span style={{ fontSize: 10, letterSpacing: 2, color: 'var(--text-secondary)' }}>
+          4-STROKE CYCLE · CYLINDER 1
+        </span>
+        <button
+          onClick={() => setExpanded(false)}
+          style={{
+            color: 'var(--text-secondary)',
+            fontSize: 14,
+            padding: '2px 8px',
+            marginLeft: 8,
+          }}
+          title="Collapse"
+        >
+          ✕
+        </button>
       </div>
       {STROKES.map((s, i) => (
         <div

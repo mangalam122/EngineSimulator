@@ -25,9 +25,10 @@ export default function CutawayToggle() {
         fontSize: 13,
         opacity: disabled ? 0.35 : 1,
         cursor: disabled ? 'not-allowed' : 'pointer',
+        whiteSpace: 'nowrap',
       }}
     >
-      {cutaway ? '◐ X-Ray on' : '◯ X-Ray'}
+      {cutaway ? '◐ X-Ray' : '◯ X-Ray'}
     </button>
   );
 }

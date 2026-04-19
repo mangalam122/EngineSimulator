@@ -35,5 +35,7 @@ export const INLINE_4_SPEC: EngineSpec = {
   snapZones: INLINE4_SNAP_ZONES,
   partMeshes: INLINE4_MESHES,
   audioPreset: 'smooth',
-  rpm: { min: 800, default: 900, max: 6000 },
+  // Min is intentionally well below real idle (800) so learners can slow the
+  // animation down to study each stroke. 200 rpm ≈ 3.3 Hz — still smooth.
+  rpm: { min: 200, default: 900, max: 6000 },
 };
