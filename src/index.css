@@ -1,0 +1,106 @@
+:root {
+  --bg-deep: #0b0d10;
+  --bg-panel: rgba(22, 26, 32, 0.82);
+  --bg-panel-solid: #161a20;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --text-primary: #f5f7fa;
+  --text-secondary: #9aa4b2;
+  --accent: #ff7a1a;       /* hot-metal orange — snap / highlight */
+  --accent-soft: #ff9b55;
+  --success: #6fd27a;
+  --danger: #ff5d5d;
+  --shadow-1: 0 6px 24px rgba(0, 0, 0, 0.4);
+
+  color-scheme: dark;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; padding: 0; height: 100%; width: 100%; }
+body {
+  background: radial-gradient(ellipse at top, #1a1f27 0%, var(--bg-deep) 60%);
+  color: var(--text-primary);
+  overflow: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+canvas { display: block; touch-action: none; }
+
+button {
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* -------------------------------------------------------------------- */
+/*  Mobile responsive — iPhone & small viewports.                       */
+/*  We mark the root panels with data-ui-panel so CSS can override the  */
+/*  inline styles set by React components on narrow screens.            */
+/* -------------------------------------------------------------------- */
+
+/* Touch-friendly hit targets everywhere */
+@media (max-width: 640px) {
+  button, select {
+    min-height: 40px;
+  }
+}
+
+/* Parts tray: on narrow screens, collapse into a bottom sheet rather
+   than a right-side column. */
+@media (max-width: 640px) {
+  aside[data-ui-panel="tray"] {
+    right: 8px !important;
+    left: 8px !important;
+    width: auto !important;
+    top: auto !important;
+    bottom: 8px !important;
+    max-height: 55vh !important;
+  }
+  aside[data-ui-panel="inspect"] {
+    right: 8px !important;
+    left: 8px !important;
+    width: auto !important;
+    top: 72px !important;
+    bottom: 8px !important;
+  }
+  div[data-ui-panel="firing-badge"] {
+    top: auto !important;
+    bottom: 90px !important;
+    left: 8px !important;
+  }
+  div[data-ui-panel="legend"] {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: 90px !important;
+    max-width: none !important;
+  }
+  div[data-ui-panel="rpm"] {
+    left: 8px !important;
+    right: 8px !important;
+    transform: none !important;
+  }
+  div[data-ui-panel="top-bar"] {
+    left: 8px !important;
+    right: 8px !important;
+    top: 8px !important;
+  }
+}
+
+/* Extra-narrow (iPhone SE) — shrink headline typography slightly */
+@media (max-width: 380px) {
+  div[data-ui-panel="title"] > div:last-child {
+    font-size: 16px !important;
+  }
+}
