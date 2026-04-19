@@ -70,7 +70,7 @@ export default function ModeToggle() {
         }}
         title={canRun ? 'Toggle Run / Assembly' : 'Skip assembly and run'}
       >
-        {mode === 'run' ? '■ Assembly' : canRun ? '▶ Run' : '▶ Skip to Run'}
+        {mode === 'run' ? '■ Build' : canRun ? '▶ Run' : '▶ Run'}
       </button>
     </div>
   );

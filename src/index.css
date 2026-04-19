@@ -140,6 +140,7 @@ button {
 @media (max-width: 640px) {
   div[data-ui-panel="top-bar"] > div:nth-child(2) {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     flex-wrap: nowrap !important;
     scrollbar-width: none;
     max-width: 100%;
@@ -148,16 +149,31 @@ button {
   div[data-ui-panel="top-bar"] > div:nth-child(2)::-webkit-scrollbar {
     display: none;
   }
-  /* Engine selector is the widest control — let it shrink before others. */
+  /* Hide secondary labels to reclaim horizontal space. */
+  div[data-ui-panel="top-bar"] [data-mobile-hide] {
+    display: none !important;
+  }
+  /* Keep all top-bar buttons compact and equally sized. */
+  div[data-ui-panel="top-bar"] button,
   div[data-ui-panel="top-bar"] label {
-    flex-shrink: 1;
-    min-width: 0;
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+    flex-shrink: 0;
   }
   div[data-ui-panel="top-bar"] label select {
-    max-width: 110px;
+    max-width: 92px;
+    font-size: 12px !important;
   }
   /* Tighten the progress bar under the top row to reclaim canvas height. */
   div[data-ui-panel="top-bar"] > div:last-child {
-    margin-top: 2px;
+    margin-top: 4px;
+  }
+
+  /* Shift the progress bar & title to be single line and tighter. */
+  div[data-ui-panel="title"] > div:first-child {
+    font-size: 9px !important;
+  }
+  div[data-ui-panel="title"] > div:last-child {
+    font-size: 16px !important;
   }
 }

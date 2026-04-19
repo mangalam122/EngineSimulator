@@ -36,6 +36,7 @@ export const INLINE_4_SPEC: EngineSpec = {
   partMeshes: INLINE4_MESHES,
   audioPreset: 'smooth',
   // Min is intentionally well below real idle (800) so learners can slow the
-  // animation down to study each stroke. 200 rpm ≈ 3.3 Hz — still smooth.
-  rpm: { min: 200, default: 900, max: 6000 },
+  // animation down to almost-frame-by-frame pace to study each stroke.
+  // 60 rpm = 1 crank rotation / second — slow enough to watch each valve move.
+  rpm: { min: 60, default: 900, max: 6000 },
 };

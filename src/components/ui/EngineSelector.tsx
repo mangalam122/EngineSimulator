@@ -25,10 +25,17 @@ export default function EngineSelector() {
         color: 'var(--text-primary)',
         fontSize: 12,
         cursor: 'pointer',
+        whiteSpace: 'nowrap',
+        flexShrink: 0,
       }}
       title="Choose which engine to assemble and run"
     >
-      <span style={{ color: 'var(--text-secondary)', letterSpacing: 1, fontSize: 10 }}>ENGINE</span>
+      <span
+        data-mobile-hide
+        style={{ color: 'var(--text-secondary)', letterSpacing: 1, fontSize: 10 }}
+      >
+        ENGINE
+      </span>
       <select
         value={specId}
         onChange={(e) => setEngineSpec(e.target.value as EngineSpecId)}

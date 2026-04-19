@@ -79,15 +79,22 @@ export default function Scene() {
         <boxGeometry args={[0.001, 0.001, 0.001]} />
       </mesh>
 
-      {/* --- Camera controls --- */}
+      {/* --- Camera controls ---
+          Generous ranges so users can really explore: can zoom in close,
+          pull far out, orbit almost all the way under. Touch gestures
+          (one-finger rotate, two-finger pinch/pan) come free from Drei. */}
       <OrbitControls
         makeDefault
         enablePan
         enableZoom
         enableRotate={!heldPart /* §8.3 — disable orbit while dragging a part */}
-        minDistance={4}
-        maxDistance={18}
-        maxPolarAngle={Math.PI / 2 - 0.05}
+        minDistance={2.5}
+        maxDistance={28}
+        minPolarAngle={0.05}
+        maxPolarAngle={Math.PI - 0.05}
+        rotateSpeed={0.9}
+        zoomSpeed={0.9}
+        panSpeed={0.9}
         target={[0, 0.4, 0]}
       />
     </>

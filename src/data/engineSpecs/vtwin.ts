@@ -28,6 +28,6 @@ export const V_TWIN_SPEC: EngineSpec = {
   partMeshes: VTWIN_PART_MESHES,
   audioPreset: 'potato',
   // Min dropped well below real idle so learners can step through the cycle
-  // slowly — makes the 315°/405° uneven fire easy to spot.
-  rpm: { min: 150, default: 900, max: 5500 },
+  // almost frame-by-frame — makes the 315°/405° uneven fire easy to spot.
+  rpm: { min: 60, default: 900, max: 5500 },
 };

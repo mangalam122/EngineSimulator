@@ -31,7 +31,6 @@ export default function PartsTray() {
   const setTrayOpen = useEngineStore((s) => s.setTrayOpen);
   const assembled = useEngineStore((s) => s.assembledParts);
   const heldPart = useEngineStore((s) => s.heldPart);
-  const pickUp = useEngineStore((s) => s.pickUp);
 
   const grouped = useMemo(() => {
     const byCat = new Map<string, EnginePart[]>();
@@ -45,25 +44,28 @@ export default function PartsTray() {
 
   return (
     <>
-      {/* Collapsed handle */}
+      {/* Collapsed handle — sits in the bottom-right as a floating pill so
+          it never collides with the top-bar controls on narrow viewports. */}
       {!trayOpen && (
         <button
+          data-ui-panel="tray-handle"
           onClick={() => setTrayOpen(true)}
           style={{
             position: 'absolute',
             right: 16,
-            top: 80,
+            bottom: 16,
             pointerEvents: 'auto',
-            padding: '10px 14px',
-            borderRadius: 10,
-            background: 'var(--bg-panel)',
-            border: '1px solid var(--border-subtle)',
-            color: 'var(--text-primary)',
+            padding: '12px 16px',
+            borderRadius: 999,
+            background: 'var(--accent)',
+            color: '#0b0d10',
             fontSize: 13,
-            backdropFilter: 'blur(12px)',
+            fontWeight: 700,
+            boxShadow: '0 6px 20px rgba(255,122,26,0.45)',
+            zIndex: 7,
           }}
         >
-          ⟨ Parts
+          ⟨ Parts ({assembled.length}/{PARTS.length})
         </button>
       )}
 
@@ -141,7 +143,15 @@ export default function PartsTray() {
                       placed={assembled.includes(part.id)}
                       held={heldPart === part.id}
                       depsMet={part.requiresParts.every((r) => assembled.includes(r))}
-                      onPick={() => pickUp(part.id)}
+                      onPick={() => {
+                        // Tap-to-place for all devices — the drag-to-position
+                        // flow was unreliable on touch (no pointermove after
+                        // a tap) and didn't add real pedagogical value. Each
+                        // part has exactly one valid snap zone, so we just
+                        // place it directly and play the snap sound.
+                        useEngineStore.getState().placePart(part.id);
+                        void import('../../utils/audio').then((m) => m.playClick());
+                      }}
                       partById={PART_BY_ID}
                     />
                   ))}
