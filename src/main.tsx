@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Analytics } from "@vercel/analytics/next";
 import App from './App';
 import './index.css';
 import { useEngineStore, engineRuntime } from './store/useEngineStore';
@@ -14,6 +15,7 @@ if (import.meta.env.DEV) {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+    <Analytics />
     <App />
   </React.StrictMode>,
 );
